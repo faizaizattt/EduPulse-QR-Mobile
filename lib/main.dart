@@ -23,7 +23,7 @@ class EduPulseApp extends StatelessWidget {
         '/parent_dashboard': (context) => Scaffold(
               appBar: AppBar(title: const Text('Halaman Ibu Bapa')),
               body: const Center(child: Text('Selamat datang, Ibu Bapa!')),
-            ),aaa
+            ),
       },
     );
   }
