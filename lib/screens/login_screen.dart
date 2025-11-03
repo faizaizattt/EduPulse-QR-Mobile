@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,100 +8,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  // ===== MOCK login function (Phase 1) =====
-  // Simulate a server response. Later we'll replace this with a real HTTP call.
-  Future<Map<String, dynamic>> mockLogin(String email, String password) async {
-    await Future.delayed(const Duration(seconds: 1)); // simulate delay
+  void _handleLogin() {
+    setState(() {
+      _isLoading = true;
+    });
 
-    // simple mock logic:
-    if (email == 'teacher@edu.com' && password == '123456') {
-      return {
-        'status': true,
-        'token': 'mock_teacher_token_abc123',
-        'user': {
-          'id': 10,
-          'name': 'Cikgu Faiz',
-          'email': email,
-          'role': 'teacher',
-        }
-      };
-    } else if (email == 'parent@edu.com' && password == '123456') {
-      return {
-        'status': true,
-        'token': 'mock_parent_token_def456',
-        'user': {
-          'id': 20,
-          'name': 'Ibu Aida',
-          'email': email,
-          'role': 'parent',
-        }
-      };
-    }
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        _isLoading = false;
+      });
 
-    // invalid credentials
-    return {
-      'status': false,
-      'message': 'Emel atau kata laluan salah',
-    };
-  }
-  // ===== end mock =====
-
-  Future<void> _handleLogin() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text;
-
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sila masukkan emel dan kata laluan')),
-      );
-      return;
-    }
-
-    setState(() => _isLoading = true);
-
-    try {
-      final response = await mockLogin(email, password);
-
-      if (response['status'] == true) {
-        // store token + basic user info locally
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', response['token'] as String);
-        await prefs.setString('role', response['user']['role'] as String);
-        await prefs.setString('name', response['user']['name'] as String);
-
-        final role = response['user']['role'] as String;
-        final name = response['user']['name'] as String;
-
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Selamat datang, $name')),
-        );
-
-        if (role == 'teacher') {
-          Navigator.pushReplacementNamed(context, '/teacher_dashboard');
-        } else {
-          Navigator.pushReplacementNamed(context, '/parent_dashboard');
-        }
+      // Navigate based on email
+      if (_emailController.text.contains("parent")) {
+        Navigator.pushReplacementNamed(context, '/pilih_anak');
       } else {
-        final msg = response['message'] ?? 'Gagal log masuk';
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+        Navigator.pushReplacementNamed(context, '/dashboard_teacher');
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ralat: $e')));
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+    });
   }
 
   @override
@@ -132,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 30),
 
-              // medan emel
+              // Email field
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -146,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 16),
 
-              // medan kata laluan
+              // Password field
               TextField(
                 controller: _passwordController,
                 obscureText: true,
@@ -160,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 24),
 
-              // butang log masuk
+              // Login button
               SizedBox(
                 width: double.infinity,
                 height: 50,

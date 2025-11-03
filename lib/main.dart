@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
+import 'screens/select_child.dart';
+import 'screens/dashboard_parent.dart';
 
 void main() {
   runApp(const EduPulseApp());
@@ -20,10 +22,8 @@ class EduPulseApp extends StatelessWidget {
               appBar: AppBar(title: const Text('Halaman Guru')),
               body: const Center(child: Text('Selamat datang, Guru!')),
             ),
-        '/parent_dashboard': (context) => Scaffold(
-              appBar: AppBar(title: const Text('Halaman Ibu Bapa')),
-              body: const Center(child: Text('Selamat datang, Ibu Bapa!')),
-            ),
+        '/pilih_anak': (context) => const SelectChildScreen(),
+        '/parent_dashboard': (context) => const ParentDashboardScreen(),
       },
     );
   }
