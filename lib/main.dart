@@ -16,10 +16,14 @@ class EduPulseApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),
+
+        // Dashboard untuk guru
         '/teacher_dashboard': (context) => Scaffold(
               appBar: AppBar(title: const Text('Halaman Guru')),
               body: const Center(child: Text('Selamat datang, Guru!')),
             ),
+
+        // Dashboard untuk ibu bapa
         '/parent_dashboard': (context) => Scaffold(
               appBar: AppBar(title: const Text('Halaman Ibu Bapa')),
               body: const Center(child: Text('Selamat datang, Ibu Bapa!')),

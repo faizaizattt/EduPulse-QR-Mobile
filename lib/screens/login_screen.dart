@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,23 +16,80 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  void _handleLogin() {
-    setState(() {
-      _isLoading = true;
-    });
+  // Fungsi login (sementara menggunakan API Reqres)
+  Future<Map<String, dynamic>> realLogin(String email, String password) async {
+    final url = Uri.parse('https://reqres.in/api/login');
 
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        _isLoading = false;
-      });
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
 
-      // Navigate based on email
-      if (_emailController.text.contains("parent")) {
-        Navigator.pushReplacementNamed(context, '/pilih_anak');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        // Contoh data pengguna (sementara)
+        return {
+          'status': true,
+          'token': data['token'],
+          'user': {
+            'name': 'Guru Contoh',
+            'role': email.contains("parent") ? 'parent' : 'teacher',
+          },
+        };
       } else {
-        Navigator.pushReplacementNamed(context, '/dashboard_teacher');
+        final data = jsonDecode(response.body);
+        return {
+          'status': false,
+          'message': data['error'] ?? 'Ralat log masuk',
+        };
       }
-    });
+    } on SocketException {
+      return {'status': false, 'message': 'Tiada sambungan internet'};
+    } catch (e) {
+      return {'status': false, 'message': 'Ralat sistem: $e'};
+    }
+  }
+
+  Future<void> _handleLogin() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Sila isi semua ruangan')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    final response = await realLogin(email, password);
+
+    setState(() => _isLoading = false);
+
+    if (response['status']) {
+      // Simpan token
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', response['token']);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Selamat datang, ${response['user']['name']}')),
+      );
+
+      // Arahkan mengikut peranan
+      if (response['user']['role'] == 'parent') {
+        Navigator.pushReplacementNamed(context, '/parent_dashboard');
+      } else {
+        Navigator.pushReplacementNamed(context, '/teacher_dashboard');
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response['message'] ?? 'Log masuk gagal')),
+      );
+    }
   }
 
   @override
@@ -57,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 30),
 
-              // Email field
+              // Emel
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -71,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Password field
+              // Kata laluan
               TextField(
                 controller: _passwordController,
                 obscureText: true,
@@ -85,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Login button
+              // Butang Log Masuk
               SizedBox(
                 width: double.infinity,
                 height: 50,
