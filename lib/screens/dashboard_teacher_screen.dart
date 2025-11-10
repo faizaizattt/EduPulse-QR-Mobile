@@ -118,7 +118,7 @@ class _DashboardPageState extends State<DashboardPage> {
       );
     }
 
-    final List<Widget> _pages = [
+    final List<Widget> pages = [
       _buildUtama(),
       _buildKehadiran(),
       _buildRMT(),
@@ -138,7 +138,7 @@ class _DashboardPageState extends State<DashboardPage> {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      body: _pages[_selectedIndex],
+      body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
@@ -180,7 +180,7 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: color.withOpacity(0.15),
+              backgroundColor: color.withAlpha((0.15 * 255).round()),
               child: Icon(icon, color: color),
             ),
             const SizedBox(width: 16),

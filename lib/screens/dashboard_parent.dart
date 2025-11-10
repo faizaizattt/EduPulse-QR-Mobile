@@ -242,7 +242,7 @@ class ParentDashboardScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: (activity['color'] as Color).withOpacity(0.2),
+                            color: (activity['color'] as Color).withAlpha((0.2 * 255).round()),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(activity['icon'] as IconData, color: activity['color'] as Color),
@@ -279,7 +279,7 @@ class ParentDashboardScreen extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(color: color.withAlpha((0.2 * 255).round()), borderRadius: BorderRadius.circular(12)),
               child: Icon(icon, color: color),
             ),
             const SizedBox(width: 12),
