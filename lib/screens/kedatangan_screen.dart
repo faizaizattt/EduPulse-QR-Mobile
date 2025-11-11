@@ -42,17 +42,6 @@ class _KedatanganScreenState extends State<KedatanganScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kehadiran Pelajar'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.qr_code_scanner),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const QrScannerScreen()),
-              );
-            },
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
