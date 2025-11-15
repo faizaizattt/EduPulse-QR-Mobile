@@ -3,7 +3,7 @@ import 'screens/login_screen.dart';
 import 'screens/dashboard_teacher_screen.dart';
 import 'screens/dashboard_parent.dart';
 import 'screens/select_child.dart';
-import 'screens/qr_scanner_screen.dart';
+import 'screens/qr_function_selector.dart';
 import 'screens/rmt_screen.dart';
 
 void main() {
@@ -21,19 +21,11 @@ class EduPulseApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),
-
-        // Dashboard untuk guru
         '/teacher_dashboard': (context) => const DashboardPage(),
-
-        // Skrin pemilihan anak untuk ibu bapa
         '/select_child_screen': (context) => const SelectChildScreen(),
-
-        // Dashboard untuk ibu bapaaa
         '/parent_dashboard': (context) => const ParentDashboardScreen(),
-
-        '/qr_scanner': (context) => const QrScannerScreen(),
-  '/rmt': (context) => const RmtScreen(),
-
+        '/qr_function_selector': (context) => const QrFunctionSelector(),
+        '/rmt': (context) => const RmtScreen(),
       },
     );
   }

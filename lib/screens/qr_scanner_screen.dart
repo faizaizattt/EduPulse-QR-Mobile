@@ -4,7 +4,9 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'attendance_success_screen.dart';
 
 class QrScannerScreen extends StatefulWidget {
-  const QrScannerScreen({super.key});
+  final String function; // kehadiran, rmt, or sahsiah
+
+  const QrScannerScreen({super.key, required this.function});
 
   @override
   State<QrScannerScreen> createState() => _QrScannerScreenState();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'qr_scanner_screen.dart';
+import 'qr_function_selector.dart';
 
 class KedatanganScreen extends StatefulWidget {
   const KedatanganScreen({super.key});
@@ -13,18 +13,73 @@ class _KedatanganScreenState extends State<KedatanganScreen> {
 
   // Mock data
   final List<Map<String, dynamic>> students = [
-    {'name': 'Ahmad bin Ali', 'class': '5A', 'status': 'Hadir', 'time': '7:30 AM'},
-    {'name': 'Siti Nurhaliza', 'class': '5A', 'status': 'Hadir', 'time': '7:25 AM'},
-    {'name': 'Muhammad Hakimi', 'class': '5A', 'status': 'Tidak Hadir', 'time': '-'},
+    {
+      'name': 'Ahmad bin Ali',
+      'class': '5A',
+      'status': 'Hadir',
+      'time': '7:30 AM',
+    },
+    {
+      'name': 'Siti Nurhaliza',
+      'class': '5A',
+      'status': 'Hadir',
+      'time': '7:25 AM',
+    },
+    {
+      'name': 'Muhammad Hakimi',
+      'class': '5A',
+      'status': 'Tidak Hadir',
+      'time': '-',
+    },
     {'name': 'Nurul Ain', 'class': '5A', 'status': 'Hadir', 'time': '7:35 AM'},
-    {'name': 'Khairul Azman', 'class': '5B', 'status': 'Hadir', 'time': '7:28 AM'},
-    {'name': 'Farah Liyana', 'class': '5B', 'status': 'Tidak Hadir', 'time': '-'},
-    {'name': 'Amirul Hakim', 'class': '5B', 'status': 'Hadir', 'time': '7:32 AM'},
-    {'name': 'Zainab Karim', 'class': '4A', 'status': 'Hadir', 'time': '7:29 AM'},
-    {'name': 'Hassan Ibrahim', 'class': '4A', 'status': 'Hadir', 'time': '7:27 AM'},
-    {'name': 'Aisyah Hani', 'class': '4A', 'status': 'Tidak Hadir', 'time': '-'},
-    {'name': 'Danial Ariff', 'class': '6A', 'status': 'Hadir', 'time': '7:31 AM'},
-    {'name': 'Nadia Sofea', 'class': '6A', 'status': 'Hadir', 'time': '7:26 AM'},
+    {
+      'name': 'Khairul Azman',
+      'class': '5B',
+      'status': 'Hadir',
+      'time': '7:28 AM',
+    },
+    {
+      'name': 'Farah Liyana',
+      'class': '5B',
+      'status': 'Tidak Hadir',
+      'time': '-',
+    },
+    {
+      'name': 'Amirul Hakim',
+      'class': '5B',
+      'status': 'Hadir',
+      'time': '7:32 AM',
+    },
+    {
+      'name': 'Zainab Karim',
+      'class': '4A',
+      'status': 'Hadir',
+      'time': '7:29 AM',
+    },
+    {
+      'name': 'Hassan Ibrahim',
+      'class': '4A',
+      'status': 'Hadir',
+      'time': '7:27 AM',
+    },
+    {
+      'name': 'Aisyah Hani',
+      'class': '4A',
+      'status': 'Tidak Hadir',
+      'time': '-',
+    },
+    {
+      'name': 'Danial Ariff',
+      'class': '6A',
+      'status': 'Hadir',
+      'time': '7:31 AM',
+    },
+    {
+      'name': 'Nadia Sofea',
+      'class': '6A',
+      'status': 'Hadir',
+      'time': '7:26 AM',
+    },
   ];
 
   List<String> getClassList() {
@@ -40,9 +95,7 @@ class _KedatanganScreenState extends State<KedatanganScreen> {
     final classes = getClassList();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Kehadiran Pelajar'),
-      ),
+      appBar: AppBar(title: const Text('Kehadiran Pelajar')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: selectedClass == null
@@ -71,9 +124,11 @@ class _KedatanganScreenState extends State<KedatanganScreen> {
                           child: ListTile(
                             title: Text('Kelas $className'),
                             subtitle: Text(
-                                '$hadir daripada $total pelajar hadir ($percent%)'),
+                              '$hadir daripada $total pelajar hadir ($percent%)',
+                            ),
                             trailing: const Icon(Icons.chevron_right),
-                            onTap: () => setState(() => selectedClass = className),
+                            onTap: () =>
+                                setState(() => selectedClass = className),
                           ),
                         );
                       },
@@ -93,7 +148,9 @@ class _KedatanganScreenState extends State<KedatanganScreen> {
                       Text(
                         'Kelas $selectedClass',
                         style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -102,17 +159,20 @@ class _KedatanganScreenState extends State<KedatanganScreen> {
                     child: ListView.builder(
                       itemCount: getStudentsByClass(selectedClass!).length,
                       itemBuilder: (context, index) {
-                        final student =
-                            getStudentsByClass(selectedClass!)[index];
+                        final student = getStudentsByClass(
+                          selectedClass!,
+                        )[index];
                         final hadir = student['status'] == 'Hadir';
 
                         return Card(
                           margin: const EdgeInsets.symmetric(vertical: 6),
                           child: ListTile(
                             title: Text(student['name']),
-                            subtitle: Text(hadir
-                                ? 'Hadir pada ${student['time']}'
-                                : 'Tidak hadir'),
+                            subtitle: Text(
+                              hadir
+                                  ? 'Hadir pada ${student['time']}'
+                                  : 'Tidak hadir',
+                            ),
                             trailing: Icon(
                               hadir ? Icons.check_circle : Icons.cancel,
                               color: hadir ? Colors.green : Colors.red,
@@ -136,13 +196,15 @@ class _KedatanganScreenState extends State<KedatanganScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => const QrScannerScreen()),
+                            builder: (_) => const QrFunctionSelector(),
+                          ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                   ),

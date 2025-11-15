@@ -1,68 +1,70 @@
 import 'package:flutter/material.dart';
+import 'qr_scanner_screen.dart';
 
 class AttendanceSuccessScreen extends StatelessWidget {
   final String scannedCode;
+  final String function;
 
-  const AttendanceSuccessScreen({super.key, required this.scannedCode});
+  const AttendanceSuccessScreen({
+    super.key,
+    required this.scannedCode,
+    this.function = 'kehadiran',
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Kehadiran Berjaya'),
+        backgroundColor: Colors.blueAccent,
+      ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 20),
-              const Text(
-                'Kehadiran Berjaya Direkod!',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
-                ),
-              ),
-              const SizedBox(height: 12),
+              const Icon(Icons.check_circle, size: 100, color: Colors.green),
+              const SizedBox(height: 24),
               Text(
-                'Pelajar dengan kod berikut telah direkod:',
+                'Kod QR telah diimbas dengan jayanya!',
+                style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey[700]),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                scannedCode,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 40),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                icon: const Icon(Icons.qr_code_2, color: Colors.white),
-                label: const Text(
-                  'Imbas Lagi',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/qr_scanner');
-                },
               ),
               const SizedBox(height: 16),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Kembali'),
+              Text(
+                'Kod Imbasan: $scannedCode',
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      // Start scanning next student with the same function
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => QrScannerScreen(function: function),
+                        ),
+                      );
+                    },
+                    child: const Text('Imbas Pelajar Seterusnya'),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Back to app home (root)
+                      Navigator.popUntil(
+                        context,
+                        ModalRoute.withName(Navigator.defaultRouteName),
+                      );
+                    },
+                    child: const Text('Kembali ke Halaman Utama'),
+                  ),
+                ],
               ),
             ],
           ),

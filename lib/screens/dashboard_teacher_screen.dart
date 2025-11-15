@@ -3,8 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'rmt_screen.dart';
 import 'kedatangan_screen.dart';
 import 'sahsiah_screen.dart';
-import 'qr_scanner_screen.dart';
 import 'profile_screen.dart';
+import 'qr_function_selector.dart'; // added import
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -68,16 +68,16 @@ class _DashboardPageState extends State<DashboardPage> {
             // Welcome Message with Date
             Text(
               "Selamat Datang 👋",
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
               "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.grey[600],
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
             ),
             const SizedBox(height: 24),
 
@@ -90,14 +90,30 @@ class _DashboardPageState extends State<DashboardPage> {
               mainAxisSpacing: 10,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                _buildStatCard("Total Pelajar", totalStudents.toString(),
-                    Icons.people, Colors.blue),
                 _buildStatCard(
-                    "RMT Kehadiran", "85%", Icons.restaurant, Colors.orange),
-                _buildStatCard("Rekod Sahsiah", "12 rekod", Icons.assignment,
-                    Colors.green),
-                _buildStatCard("Kemas Kini", "2 minit lalu", Icons.update,
-                    Colors.purple),
+                  "Total Pelajar",
+                  totalStudents.toString(),
+                  Icons.people,
+                  Colors.blue,
+                ),
+                _buildStatCard(
+                  "RMT Kehadiran",
+                  "85%",
+                  Icons.restaurant,
+                  Colors.orange,
+                ),
+                _buildStatCard(
+                  "Rekod Sahsiah",
+                  "12 rekod",
+                  Icons.assignment,
+                  Colors.green,
+                ),
+                _buildStatCard(
+                  "Kemas Kini",
+                  "2 minit lalu",
+                  Icons.update,
+                  Colors.purple,
+                ),
               ],
             ),
 
@@ -110,7 +126,11 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildKehadiran() => const KedatanganScreen();
-  Widget _buildQRScanner() => const QrScannerScreen();
+  Widget _buildQRScanner() {
+    // Show the function selector directly when the QR Scanner tab is active
+    return const QrFunctionSelector();
+  }
+
   Widget _buildRMT() => const RmtScreen();
   Widget _buildSahsiah() => const SahsiahScreen();
 
@@ -119,9 +139,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final List<Widget> pages = [
@@ -138,7 +156,7 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             Icon(Icons.dashboard, size: 24),
             SizedBox(width: 8),
-            Text('Menu Utama'),
+            Text('Portal Guru'),
           ],
         ),
         backgroundColor: Colors.indigo,
@@ -150,9 +168,7 @@ class _DashboardPageState extends State<DashboardPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const ProfileScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
           ),
@@ -166,10 +182,7 @@ class _DashboardPageState extends State<DashboardPage> {
         selectedItemColor: Colors.indigo,
         unselectedItemColor: Colors.grey,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Utama',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Utama'),
           BottomNavigationBarItem(
             icon: Icon(Icons.check_circle),
             label: 'Kehadiran',
@@ -178,14 +191,8 @@ class _DashboardPageState extends State<DashboardPage> {
             icon: Icon(Icons.qr_code_scanner),
             label: 'QR Scanner',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.restaurant),
-            label: 'RMT',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.thumb_up),
-            label: 'Sahsiah',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.restaurant), label: 'RMT'),
+          BottomNavigationBarItem(icon: Icon(Icons.thumb_up), label: 'Sahsiah'),
         ],
       ),
     );
@@ -194,7 +201,11 @@ class _DashboardPageState extends State<DashboardPage> {
   // --------------- COMPONENTS -----------------
 
   Widget _buildStatCard(
-      String title, String value, IconData icon, Color color) {
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 2,
@@ -210,13 +221,18 @@ class _DashboardPageState extends State<DashboardPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style:
-                        const TextStyle(fontSize: 14, color: Colors.grey)),
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
                 const SizedBox(height: 4),
-                Text(value,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ],
@@ -234,8 +250,10 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Attendance Overview",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text(
+              "Attendance Overview",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 12),
             SizedBox(
               height: 200,
@@ -243,11 +261,20 @@ class _DashboardPageState extends State<DashboardPage> {
                 PieChartData(
                   sections: [
                     PieChartSectionData(
-                        color: Colors.green, value: 70, title: 'Present'),
+                      color: Colors.green,
+                      value: 70,
+                      title: 'Present',
+                    ),
                     PieChartSectionData(
-                        color: Colors.red, value: 20, title: 'Absent'),
+                      color: Colors.red,
+                      value: 20,
+                      title: 'Absent',
+                    ),
                     PieChartSectionData(
-                        color: Colors.orange, value: 10, title: 'Late'),
+                      color: Colors.orange,
+                      value: 10,
+                      title: 'Late',
+                    ),
                   ],
                   sectionsSpace: 3,
                   centerSpaceRadius: 40,
