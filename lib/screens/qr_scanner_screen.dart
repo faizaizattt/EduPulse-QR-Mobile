@@ -56,10 +56,11 @@ class _QrScannerScreenState extends State<QrScannerScreen>
   void _setZoom(double zoom) async {
     try {
       // Clamp zoom to valid range (mobile_scanner supports 0.0 to 1.0)
-      final effectiveZoom = zoom.clamp(0.0, 1.0);
-      // Zoom adjustment is not supported by MobileScannerController
+      final clamped = zoom.clamp(0.0, 1.0);
+      // Zoom adjustment is not supported by MobileScannerController in this project,
+      // but store the chosen value for the UI state.
       setState(() {
-        _currentZoom = zoom;
+        _currentZoom = clamped;
       });
     } catch (e) {
       debugPrint('Error setting zoom: $e');

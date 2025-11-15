@@ -4,6 +4,7 @@ import 'screens/dashboard_teacher_screen.dart';
 import 'screens/dashboard_parent.dart';
 import 'screens/select_child.dart';
 import 'screens/qr_scanner_screen.dart';
+import 'screens/rmt_screen.dart';
 
 void main() {
   runApp(const EduPulseApp());
@@ -31,6 +32,7 @@ class EduPulseApp extends StatelessWidget {
         '/parent_dashboard': (context) => const ParentDashboardScreen(),
 
         '/qr_scanner': (context) => const QrScannerScreen(),
+  '/rmt': (context) => const RmtScreen(),
 
       },
     );
